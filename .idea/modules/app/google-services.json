@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "394096049747",
+    "firebase_url": "https://apptesi-e8736.firebaseio.com",
+    "project_id": "apptesi-e8736",
+    "storage_bucket": "apptesi-e8736.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394096049747:android:5f761c54e5eb270128d0a6",
+        "android_client_info": {
+          "package_name": "com.example.apptesi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394096049747-n6edsnd52l7j8140spbuh8iksion1ub8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.apptesi",
+            "certificate_hash": "502d09e938059908fd94ecbf61f738181e73b0a8"
+          }
+        },
+        {
+          "client_id": "394096049747-hvult0275rj174fg5fd2kegpb6nob4sd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg6MQ4Ntxuevbc4j5Me_WH8iggyiXeL14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394096049747-hvult0275rj174fg5fd2kegpb6nob4sd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
