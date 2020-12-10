@@ -52,6 +52,9 @@ public class Unical {
 
 
     public boolean isInTheArea(LatLng pos){
+
+
+        int i= 10;
         if (pos == null){
             return false;
         }
