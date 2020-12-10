@@ -111,7 +111,7 @@ public class GPS extends FragmentActivity implements LocationListener, OnMapRead
         } else if (myCoordinate != null && (myCoordinate.latitude != newCoordinate.latitude && myCoordinate.longitude != newCoordinate.longitude)) {
 
             myCoordinate = newCoordinate;
-            reset();
+            reset();//s
         }
     }
 
