@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/closeLocationService"
+        android:actionLayout="@layout/activity_main"
+        android:orderInCategory="100"
+        android:title="close_backgroud_location" />
+
+    <item
+        android:id="@+id/setting"
+        android:orderInCategory="200"
+        android:actionLayout="@layout/activity_main"
+        android:title="Setting" />
+</menu>

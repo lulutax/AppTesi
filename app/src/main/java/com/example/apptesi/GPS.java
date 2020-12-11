@@ -10,16 +10,20 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class GPS extends FragmentActivity implements LocationListener, OnMapReadyCallback  {
+public class GPS extends AppCompatActivity implements LocationListener, OnMapReadyCallback  {
     protected LocationManager locationManager;
     double lat, lon;
     LatLng myCoordinate = null;
@@ -45,6 +49,33 @@ public class GPS extends FragmentActivity implements LocationListener, OnMapRead
     private Intent intentLocationService ;
     DataBase db;
     Unical unical;
+private Toolbar myToolbar;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar, menu); // inflate your menu resource
+
+        if (menu != null) {
+            MenuItem serv = menu.findItem(R.id.closeLocationService);
+            serv.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Log.d("prova","funziona");
+                    return true;
+                    }
+            });
+
+        }
+        return true;
+    }
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +94,8 @@ public class GPS extends FragmentActivity implements LocationListener, OnMapRead
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
 
-        //Toolbar toolbar = findViewById(R.id.toolBar);
+      myToolbar  = findViewById(R.id.toolbar);
+
         user = new UserLocation();
         idPhone();
         db = new DataBase();
