@@ -1,7 +1,6 @@
 package com.example.apptesi;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,28 +9,24 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 
 
 public class GPS extends AppCompatActivity implements LocationListener, OnMapReadyCallback  {
@@ -45,14 +40,15 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     static final int MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID = 3;
     public UserLocation user;
     boolean isIn;
-   // Button stop;
     private Intent intentLocationService ;
-    DataBase db;
-    Unical unical;
-private Toolbar myToolbar;
+    private DataBase db;
+    private Unical unical;
+    private Toolbar myToolbar;
+
+
+    //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) decidere ogni quanto aggiornare la posizione )
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
 
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
@@ -63,7 +59,7 @@ private Toolbar myToolbar;
             serv.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Log.d("prova","funziona");
+                    stopService(intentLocationService);
                     return true;
                     }
             });
@@ -94,46 +90,31 @@ private Toolbar myToolbar;
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
 
-      myToolbar  = findViewById(R.id.toolbar);
-
+        myToolbar  = findViewById(R.id.toolbar);
         user = new UserLocation();
         idPhone();
         db = new DataBase();
-        user.setImei(android_id);
-        //stop= findViewById(R.id.stopButton);
-      // stop.setOnClickListener(new View.OnClickListener() {
-           /* @Override
-            public void onClick(View v) {
-                stopService(intentLocationService);
-            }
-        });*/
 
-    //latLng = new LocationService();
-    //LatLng prova = latLng.startLocation(this);
 
     }
 
-   /* @SuppressLint("ResourceType")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-         super.onCreateOptionsMenu(menu);
-
-            getMenuInflater().inflate(R.layout.menu_toolbar,menu);
-            return true;
-
-    }*/
 
     public void startLocationBackground(){
 
+        //-----------------------PROBLEMA-------------non mi appare il check del permesso della location in background? --------------------
         if( ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.ACCESS_BACKGROUND_LOCATION},2);
         }
-      // intentLocationService = new Intent(getApplicationContext(),LocationService.class);
-      //  startService(intentLocationService);
-     //   Log.d("LOCATION_UPDATE","start");
+
+
+        intentLocationService = new Intent(getApplicationContext(), LocationService.class);
+        startService(intentLocationService);
 
 
     }
+
+
+
     @Override
     public void onLocationChanged(Location location) {
        LatLng newCoordinate = new LatLng(location.getLatitude(), location.getLongitude());
@@ -149,7 +130,7 @@ private Toolbar myToolbar;
 
     @Override
     public void onProviderDisabled(String provider) {
-            Log.d("position","disable");
+        Log.d("Location","disable");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Confirm Location");
         alertDialog.setMessage("Your Location is enabled, please enjoy");
@@ -164,7 +145,8 @@ private Toolbar myToolbar;
 
     @Override
     public void onProviderEnabled(String provider) {
-            Log.d("Latitude","enable");
+
+        Log.d("Location","enable");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Confirm Location");
         alertDialog.setMessage("Your Location is enabled, please enjoy");
@@ -177,9 +159,11 @@ private Toolbar myToolbar;
         AlertDialog alert = alertDialog.create();
         alert.show();
         }
+
+
      @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.d("situazione","statusChanged");
+            Log.d("Location","statusChanged");
         }
 
     @Override
@@ -212,7 +196,6 @@ private Toolbar myToolbar;
                 }
             }
             case 2: {
-                Log.d("background","permesso");
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
@@ -234,7 +217,7 @@ private Toolbar myToolbar;
 
         unical = new Unical(this);
         unical.drawAreaUnical();
-        //startLocationBackground();
+      //  startLocationBackground();
 
     }
 
@@ -279,8 +262,7 @@ private Toolbar myToolbar;
                Log.d("situazione","ho inserito l'utente");
            }
             //verifico quante persone ci sono all'interno dell'unical
-            long nPerson = db.getNumberOfPerson();
-            Toast.makeText(this, "ci sono" +nPerson+" persone all'unical!", Toast.LENGTH_SHORT).show();
+            db.getNumberOfPerson(this);
         }
         //lo rimuovo se le coordinate non sono all'interno dell'unical
         else{
@@ -288,52 +270,26 @@ private Toolbar myToolbar;
            db.removeValue(android_id);
         }
         gmap.clear();
-        Log.d("unical","dev essere ultimo");
         unical.drawAreaUnical();
         gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
-        //addHeadMap();
+       // addHeadMap();
 
     }
-
+/*
     //mappa di calore
- /*   private void addHeadMap() {
+    private void addHeadMap() {
 
          final List<LatLng> list = new ArrayList<>();
 
-        usRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // listas.clear();
-
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
-                    double latitudP= Double.valueOf(postSnapshot.child("latitude").getValue().toString());
-                    double longituP= Double.valueOf(postSnapshot.child("longitude").getValue().toString());
-                    LatLng l= new LatLng(latitudP,longituP);
-                    list.add(l);
-
-
-                }
-
+            db.getListOfLatLng(list);
                 HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
                         .data(list).build();
                 TileOverlay overlay = gmap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
                 //overlay.clearTileCache();
 
         }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
-
-
-    }*/
-
+*/
 
 
 }

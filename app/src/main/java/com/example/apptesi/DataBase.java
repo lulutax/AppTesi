@@ -1,12 +1,19 @@
 package com.example.apptesi;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class DataBase {
 
@@ -18,64 +25,81 @@ public class DataBase {
     DataBase(){
 
         dbRef = FirebaseDatabase.getInstance().getReference();
-        usRef = FirebaseDatabase.getInstance().getReference().child("UserLocation");
     }
+    public void prova(){
 
-
-
-    public boolean existIntheDb(String android_id){
-
-        usRef.orderByChild("imei").equalTo(android_id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                     isInTheDb = true;
-                    Log.d("situazione","è nel db");
-                } else {
-                    isInTheDb = false;
-                    Log.d("situazione","non è nel db");
-
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        return isInTheDb;
-    }
-
-    public void setValue(String android_id, UserLocation user){
-        usRef.child(android_id).setValue(user);
-        Log.d("situazione","ho aggiornato le coordinate");
-    }
-
-    public void removeValue(String android_id){
-        usRef.child(android_id).removeValue();
 
     }
+/*
+public List<LatLng> getListOfLatLng(List<LatLng> list){
 
+    usRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            // listas.clear();
 
-    public long getNumberOfPerson(){
-        usRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                numPerson = dataSnapshot.getChildrenCount();
+            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
+                double latitudP = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
+                double longituP = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
+                LatLng l = new LatLng(latitudP, longituP);
+                list.add(l);
+
 
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+*/
+
+            public boolean existIntheDb (final String android_id){
+                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(android_id)){
+                            isInTheDb = true;
+                        } else {
+                            isInTheDb = false;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                return isInTheDb;
+            }
+
+            public void setValue (String android_id, UserLocation user){
+                dbRef.child(android_id).setValue(user);
+            }
+
+            public void removeValue (String android_id){
+                dbRef.child(android_id).removeValue();
 
             }
-        });
-
-        return numPerson;
-    }
 
 
-    public void headMap() {
+            public void  getNumberOfPerson (final Context context) {
 
-    }
-}
+                dbRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        numPerson = dataSnapshot.getChildrenCount();
+
+                        Log.d("db", String.valueOf(numPerson));
+                        Toast.makeText(context, "ci sono" + numPerson + " persone all'unical!", Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+        }

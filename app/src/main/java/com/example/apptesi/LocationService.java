@@ -1,4 +1,5 @@
 package com.example.apptesi;
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -29,7 +30,7 @@ public class LocationService extends  Service {
                 longitude = locationResult.getLastLocation().getLongitude();
                 LatLng newCoordinate = new LatLng(latitude, longitude);
 
-                Log.d("LOCATION_UPDATE", latitude + " - " + longitude);
+                Log.d("prova", latitude + " - " + longitude);
 
             }
 
@@ -66,8 +67,8 @@ public class LocationService extends  Service {
 
 
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(300000);
-        locationRequest.setFastestInterval(300000);
+        locationRequest.setInterval(60000);
+        locationRequest.setFastestInterval(60000); // update location every minute
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationServices.getFusedLocationProviderClient(getApplicationContext()).requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
@@ -92,10 +93,13 @@ public class LocationService extends  Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("LOCATION_UPDATE","stop");
+        Log.d("prova","stop");
         LocationServices.getFusedLocationProviderClient(getApplicationContext()).removeLocationUpdates(locationCallback);
         stopForeground(true);
 
         stopSelf();
     }
+
+
+
 }
