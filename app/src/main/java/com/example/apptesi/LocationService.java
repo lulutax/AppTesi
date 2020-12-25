@@ -8,19 +8,23 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LocationService extends  Service {
 
-
     private double latitude,longitude;
-
+    LatLng myCoordinate;
+    boolean isIn;
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -28,13 +32,12 @@ public class LocationService extends  Service {
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 latitude = locationResult.getLastLocation().getLatitude();
                 longitude = locationResult.getLastLocation().getLongitude();
-                LatLng newCoordinate = new LatLng(latitude, longitude);
+                 myCoordinate = new LatLng(latitude, longitude);
+                reset();
 
-                Log.d("prova", latitude + " - " + longitude);
+
 
             }
-
-
         }
     };
 
@@ -79,6 +82,8 @@ public class LocationService extends  Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        isIn= false;
         startLocationService();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -100,6 +105,38 @@ public class LocationService extends  Service {
         stopSelf();
     }
 
+    public void reset(){
+
+        GPS.user.setLatitude(myCoordinate.latitude);
+        GPS.user.setLongitude(myCoordinate.longitude);
+
+        //se l'utente era gia presente all'interno dell unical
+        isIn= GPS.db.existIntheDb(GPS.android_id);
+
+        if(GPS.unical.isInTheArea(myCoordinate)==true){
+
+            //se è nel db aggiorno le coordinate
+            if(isIn== true){
+                GPS.db.setValue(GPS.android_id,GPS.user);
+
+            }
+            //altrimenti lo aggiungo
+            else if(isIn == false){
+                GPS.user.setLatitude(myCoordinate.latitude);
+                GPS.user.setLongitude(myCoordinate.longitude);
+                GPS.db.setValue(GPS.android_id,GPS.user);
+            }
+            //verifico quante persone ci sono all'interno dell'unical
+           // db.getNumberOfPerson(this);
+            Log.d("back","persone");
+        }
+        //lo rimuovo se le coordinate non sono all'interno dell'unical
+        else{
+            GPS.db.removeValue(GPS.android_id);
+        }
+
+
+    }
 
 
 }

@@ -33,16 +33,15 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     protected LocationManager locationManager;
     double lat, lon;
     LatLng myCoordinate = null;
-    public  GoogleMap gmap;
-    String android_id;
-   // public ArrayList<LatLng> coordinateAreaUnical;
+    static  GoogleMap gmap;
+    static String android_id;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID = 3;
-    public UserLocation user;
+    static UserLocation user;
     boolean isIn;
     private Intent intentLocationService ;
-    private DataBase db;
-    private Unical unical;
+    static DataBase db;
+    static Unical unical;
     private Toolbar myToolbar;
 
 
@@ -217,7 +216,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         unical = new Unical(this);
         unical.drawAreaUnical();
-      //  startLocationBackground();
+       // startLocationBackground();
 
     }
 
@@ -232,7 +231,6 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
             android_id = Settings.Secure.getString(this.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
 
-            Log.d("situazione","imei telefono "+android_id);
         }
 
     }
@@ -273,23 +271,10 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         unical.drawAreaUnical();
         gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
-       // addHeadMap();
+        db.headMap(this);
 
     }
-/*
-    //mappa di calore
-    private void addHeadMap() {
 
-         final List<LatLng> list = new ArrayList<>();
-
-            db.getListOfLatLng(list);
-                HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
-                        .data(list).build();
-                TileOverlay overlay = gmap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
-                //overlay.clearTileCache();
-
-        }
-*/
 
 
 }
