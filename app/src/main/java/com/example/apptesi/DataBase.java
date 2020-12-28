@@ -21,7 +21,8 @@ import java.util.List;
 
 public class DataBase {
 
-    DatabaseReference dbRef,usRef;
+    DatabaseReference dbRef;
+
     boolean isInTheDb = false;
     long numPerson=0;
 
@@ -29,30 +30,28 @@ public class DataBase {
     DataBase(){
 
         dbRef = FirebaseDatabase.getInstance().getReference();
-    }
-    public void prova(){
-
 
     }
 
-public void  headMap(Context context ){
-    dbRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            ArrayList<LatLng>temp = new ArrayList<>();
-            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
-                double latitudP = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
-                double longituP = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
-                LatLng l = new LatLng(latitudP, longituP);
-                temp.add(l);
+
+    public void  headMap(Context context ){
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<LatLng>temp = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
+                    double latitudP = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
+                    double longituP = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
+                    LatLng l = new LatLng(latitudP, longituP);
+                    temp.add(l);
 
 
-            }
-            HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
-                    .data(temp).build();
-            TileOverlay overlay = GPS.gmap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
-            overlay.clearTileCache();
+                }
+                HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
+                        .data(temp).build();
+                TileOverlay overlay = GPS.gmap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
+                overlay.clearTileCache();
 
         }
 

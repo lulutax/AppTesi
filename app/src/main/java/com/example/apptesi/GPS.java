@@ -45,7 +45,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     private Toolbar myToolbar;
 
 
-    //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) decidere ogni quanto aggiornare la posizione )
+    //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) da aggiungere decidere ogni quanto aggiornare la posizione )
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -216,6 +216,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         unical = new Unical(this);
         unical.drawAreaUnical();
+        unical.drawDemacs();
        // startLocationBackground();
 
     }
@@ -247,9 +248,13 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         if(unical.isInTheArea(myCoordinate)==true){
             Toast.makeText(this, "sei all'unical!", Toast.LENGTH_SHORT).show();
 
+
+
             //se è nel db aggiorno le coordinate
            if(isIn== true){
                db.setValue(android_id,user);
+               //findMyArea();
+
 
            }
             //altrimenti lo aggiungo
@@ -269,6 +274,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         }
         gmap.clear();
         unical.drawAreaUnical();
+        unical.drawDemacs();
         gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
         db.headMap(this);
