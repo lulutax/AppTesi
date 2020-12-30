@@ -13,21 +13,22 @@ import java.util.ArrayList;
 
 public class Unical {
      PolygonOptions polygonOptions;
-     PolygonOptions polygonOptionsDemacs;
-     ArrayList<LatLng> coordinateAreaDemacs;
     boolean result;
      ArrayList<LatLng> coordinateAreaUnical;
     public GoogleMap gmap;
 
-    ArrayList<ArrayList<LatLng>> listAree;
+    AreaDemacs areaDemacs;
 
-    public Unical(GPS gps) {
+    ArrayList<AreeUnical> listAree;
+
+   public Unical() {
 
 
-        coordinateAreaDemacs = new ArrayList<>();
         coordinateAreaUnical = new ArrayList<>();
-        listAree = new ArrayList<ArrayList<LatLng>>();
-        gmap = gps.gmap;
+        listAree = new ArrayList<>();
+        gmap = GPS.gmap;
+        areaDemacs = new AreaDemacs();
+
         //Areea unical-->inserisco le coordinate
         polygonOptions = new PolygonOptions()
                 .add(new LatLng(39.368771, 16.224308),
@@ -56,33 +57,20 @@ public class Unical {
         polygon.setStrokeColor(Color.RED);
         coordinateAreaUnical= (ArrayList<LatLng>) polygon.getPoints();
 
+         areaDemacs.drawArea();
 
-        //Areea Demacs-->inserisco le coordinate
-        polygonOptionsDemacs = new PolygonOptions()
-                .add(new LatLng(39.362948, 16.226032),
-                        new LatLng(39.363018, 16.226657),
-                        new LatLng(39.363539, 16.226593),
-                        new LatLng(39.363547, 16.225923),
-                        new LatLng(39.362948, 16.226032));
-        Polygon polygonDemacs = gmap.addPolygon(polygonOptionsDemacs);
-        polygonDemacs.setStrokeColor(Color.RED);
-        coordinateAreaDemacs= (ArrayList<LatLng>) polygonDemacs.getPoints();
 
         //aggiungo gli array nel listArray che mi servirà per la ricerca dell'area in cui si trova l'utente.
-        listAree.add(coordinateAreaDemacs);
-        listAree.add(coordinateAreaUnical);
+        listAree.add(areaDemacs);
 
     }
-    public void drawDemacs(){
-        Polygon polygonDemacs = gmap.addPolygon(polygonOptionsDemacs);
-        polygonDemacs.setStrokeColor(Color.RED);
 
-
-    }
 
     public void drawAreaUnical() {
         Polygon polygon = gmap.addPolygon(polygonOptions);
         polygon.setStrokeColor(Color.RED);
+
+        areaDemacs.drawArea();
     }
 
 
@@ -96,19 +84,19 @@ public class Unical {
     }
 
 
-    public boolean findMyArea(LatLng pos){
+    public String findMyArea(LatLng pos){
        result = false;
         if (pos == null){
-            return false;
+            return null;
         }
         for(int i =0; i<listAree.size();i++){
 
-            result = PolyUtil.containsLocation(pos,listAree.get(i),true) ;
+            result = PolyUtil.containsLocation(pos,listAree.get(i).getCoordinate(),true) ;
             if(result== true){
-                return true;
+                return listAree.get(i).getName();
             }
         }
-        return false;
+        return "dadefinire";
     }
 
 }

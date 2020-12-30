@@ -214,9 +214,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         googleMap.addMarker(new MarkerOptions().position(coordinates).title("io sono qui"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
 
-        unical = new Unical(this);
+        unical = new Unical();
         unical.drawAreaUnical();
-        unical.drawDemacs();
+       // unical.drawDemacs();
        // startLocationBackground();
 
     }
@@ -252,7 +252,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
             //se è nel db aggiorno le coordinate
            if(isIn== true){
-               db.setValue(android_id,user);
+               String area= unical.findMyArea(myCoordinate);
+               db.setValue(area,android_id,user);
                //findMyArea();
 
 
@@ -261,7 +262,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
             else if(isIn == false){
                user.setLatitude(myCoordinate.latitude);
                user.setLongitude(myCoordinate.longitude);
-               db.setValue(android_id,user);
+               String area= unical.findMyArea(myCoordinate);
+               db.setValue(area,android_id,user);
                Log.d("situazione","ho inserito l'utente");
            }
             //verifico quante persone ci sono all'interno dell'unical
@@ -270,14 +272,14 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         //lo rimuovo se le coordinate non sono all'interno dell'unical
         else{
             Toast.makeText(this, "sei fuori dall unical!", Toast.LENGTH_SHORT).show();
-           db.removeValue(android_id);
+           //db.removeValue(android_id);
         }
         gmap.clear();
         unical.drawAreaUnical();
-        unical.drawDemacs();
+        //unical.drawDemacs();
         gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
-        db.headMap(this);
+       // db.headMap(this);
 
     }
 

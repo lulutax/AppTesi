@@ -28,7 +28,7 @@ public class LocationService extends  Service {
                 latitude = locationResult.getLastLocation().getLatitude();
                 longitude = locationResult.getLastLocation().getLongitude();
                  myCoordinate = new LatLng(latitude, longitude);
-                reset();
+                //reset();
 
 
 
@@ -99,7 +99,7 @@ public class LocationService extends  Service {
 
         stopSelf();
     }
-
+/*
     public void reset(){
 
         GPS.user.setLatitude(myCoordinate.latitude);
@@ -132,6 +132,6 @@ public class LocationService extends  Service {
 
 
     }
-
+*/
 
 }

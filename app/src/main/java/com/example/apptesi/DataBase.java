@@ -31,6 +31,8 @@ public class DataBase {
 
         dbRef = FirebaseDatabase.getInstance().getReference();
 
+
+
     }
 
 
@@ -84,11 +86,11 @@ public class DataBase {
                 return isInTheDb;
             }
 
-            public void setValue (String android_id, UserLocation user){
-                dbRef.child(android_id).setValue(user);
+            public void setValue (String area,String android_id, UserLocation user){
+                dbRef.child(area).child(android_id).setValue(user);
             }
 
-            public void removeValue (String android_id){
+            public void removeValue (String area,String android_id){
                 dbRef.child(android_id).removeValue();
 
             }
