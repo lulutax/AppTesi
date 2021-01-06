@@ -23,19 +23,76 @@ public class DataBase {
 
     DatabaseReference dbRef;
 
+    DatabaseReference userRef;
+    DatabaseReference areaRef;
+
+
     boolean isInTheDb = false;
+    int c=0;
     long numPerson=0;
 
+    String areaUtente;
 
-    DataBase(){
-
+    Context context;
+    DataBase(final Context context) {
+        this.context = context;
         dbRef = FirebaseDatabase.getInstance().getReference();
+        userRef = FirebaseDatabase.getInstance().getReference().child("user");
+        //areaDemacs = FirebaseDatabase.getInstance().getReference().child("area").child("demacs");
+        //areaDaDefinire=FirebaseDatabase.getInstance().getReference().child("area").child("dadefinire");
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(GPS.android_id)) {
+
+                    areaUtente = dataSnapshot.child(GPS.android_id).child("area").getValue().toString();
 
 
+
+                }
+
+              /*  Log.d("db", String.valueOf(numPerson));
+                Toast.makeText(context, "ci sono" + numPerson + " persone all'unical!", Toast.LENGTH_SHORT).show();
+
+*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        dbRef.child("user").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
+
+                    if (postSnapshot.child("area").getValue().toString() == areaUtente){
+                        c++;
+                        Log.d("ISIN", String.valueOf(c));
+
+                    }
+                }
+               // Log.d("ISIN", String.valueOf(c));
+
+                Toast.makeText(context, "ci sono" + c + "persone/a nella tua zona", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-
+/*
     public void  headMap(Context context ){
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -64,8 +121,31 @@ public class DataBase {
 
     });
 
-}
+}*/
+ /*   public void isExist(final String android_id){
+        areaRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //UserLocation userHeat = (UserLocation) postSnapshot.getValue();
+                    if (postSnapshot.hasChild(android_id)) {
+                       area = postSnapshot.getKey().toString();
+                       break;
 
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+            }
+*/
+/*
             public boolean existIntheDb (final String android_id){
                 dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -86,12 +166,15 @@ public class DataBase {
                 return isInTheDb;
             }
 
-            public void setValue (String area,String android_id, UserLocation user){
-                dbRef.child(area).child(android_id).setValue(user);
+            public void setValue (String areaN,String android_id, UserLocation user){
+
+
+               // areaRef.child(areaN).child(android_id).setValue(user);
             }
 
-            public void removeValue (String area,String android_id){
-                dbRef.child(android_id).removeValue();
+            public void removeValue (String areaN,String android_id){
+                Log.d("ISIN","rimuovo"+areaN);
+              //  areaRef.child(areaN).child(android_id).removeValue();
 
             }
 
@@ -115,6 +198,11 @@ public class DataBase {
                     }
                 });
 
-            }
+            }*/
+
+
+    public DatabaseReference getUserRef(){
+        return userRef;
+    }
 
         }

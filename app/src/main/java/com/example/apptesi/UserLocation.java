@@ -3,7 +3,15 @@ package com.example.apptesi;
 public class UserLocation {
     public double latitude;
     public double longitude;
+    public String area;
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public double getLatitude() {
         return latitude;

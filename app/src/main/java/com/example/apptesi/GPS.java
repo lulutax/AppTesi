@@ -26,7 +26,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 
 
 public class GPS extends AppCompatActivity implements LocationListener, OnMapReadyCallback  {
@@ -38,11 +45,12 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID = 3;
     static UserLocation user;
-    boolean isIn;
+   // boolean isInTheUnical;
     private Intent intentLocationService ;
     static DataBase db;
     static Unical unical;
     private Toolbar myToolbar;
+    String area;
 
 
     //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) da aggiungere decidere ogni quanto aggiornare la posizione )
@@ -92,7 +100,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         myToolbar  = findViewById(R.id.toolbar);
         user = new UserLocation();
         idPhone();
-        db = new DataBase();
+        db = new DataBase(this);
 
 
     }
@@ -241,39 +249,23 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         user.setLatitude(myCoordinate.latitude);
         user.setLongitude(myCoordinate.longitude);
+        user.setArea(unical.findMyArea(myCoordinate));
 
-        //se l'utente era gia presente all'interno dell unical
-        isIn= db.existIntheDb(android_id);
-
-        if(unical.isInTheArea(myCoordinate)==true){
-            Toast.makeText(this, "sei all'unical!", Toast.LENGTH_SHORT).show();
-
-
-
-            //se è nel db aggiorno le coordinate
-           if(isIn== true){
-               String area= unical.findMyArea(myCoordinate);
-               db.setValue(area,android_id,user);
-               //findMyArea();
-
-
-           }
-            //altrimenti lo aggiungo
-            else if(isIn == false){
-               user.setLatitude(myCoordinate.latitude);
-               user.setLongitude(myCoordinate.longitude);
-               String area= unical.findMyArea(myCoordinate);
-               db.setValue(area,android_id,user);
-               Log.d("situazione","ho inserito l'utente");
-           }
-            //verifico quante persone ci sono all'interno dell'unical
-            db.getNumberOfPerson(this);
+        if(unical.isInTheArea(myCoordinate)) {
+           db.userRef.child(android_id).setValue(user);
+        }else{
+            db.userRef.child(android_id).removeValue();
+            Log.d("ISIN","non è all'interno dell unical");
         }
-        //lo rimuovo se le coordinate non sono all'interno dell'unical
-        else{
-            Toast.makeText(this, "sei fuori dall unical!", Toast.LENGTH_SHORT).show();
-           //db.removeValue(android_id);
-        }
+
+
+
+
+
+
+
+
+
         gmap.clear();
         unical.drawAreaUnical();
         //unical.drawDemacs();
