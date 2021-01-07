@@ -1,36 +1,51 @@
 package com.example.apptesi;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static android.graphics.Bitmap.Config.ARGB_8888;
 
 public class DataBase {
 
     DatabaseReference dbRef;
-
     DatabaseReference userRef;
-    DatabaseReference areaRef;
-
-
-    boolean isInTheDb = false;
-    int c=0;
-    long numPerson=0;
-
+    ArrayList<String> aree= new ArrayList<String>(Arrays.asList("dadefinire","demacs"));
+    ArrayList<Integer> personePerArea = new ArrayList<>(Arrays.asList(0,0));
+    ArrayList<LatLng> coordinateAreea = new ArrayList<>(Arrays.asList(new LatLng(39.358112, 16.229463),new LatLng(39.362948, 16.226032)));
+    private ArrayList<MarkerOptions> markerOp = new ArrayList<>() ;
     String areaUtente;
 
     Context context;
@@ -38,9 +53,18 @@ public class DataBase {
         this.context = context;
         dbRef = FirebaseDatabase.getInstance().getReference();
         userRef = FirebaseDatabase.getInstance().getReference().child("user");
-        //areaDemacs = FirebaseDatabase.getInstance().getReference().child("area").child("demacs");
-        //areaDaDefinire=FirebaseDatabase.getInstance().getReference().child("area").child("dadefinire");
 
+
+        /*for (int i = 0; i < aree.size(); i++) {
+            markerOp.add(new MarkerOptions()
+                    .position(new LatLng(coordinateAreea.get(i).latitude, coordinateAreea.get(i).longitude))
+                    .draggable(true));
+
+            GPS.gmap.addMarker(markerOp.get(i));
+
+            markerOp.get(i).title(aree.get(i) + " ci sono " + personePerArea.get(i) + "persone");
+
+        }*/
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -49,13 +73,42 @@ public class DataBase {
                     areaUtente = dataSnapshot.child(GPS.android_id).child("area").getValue().toString();
 
 
+                }
+                for (int i = 0; i < aree.size(); i++) {
+                    int contaAree = 0;
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                        if (postSnapshot.child("area").getValue().equals(aree.get(i))) {
+                            contaAree++;
+                        }
+
+                    }
+
+                    Log.d("ISIN", contaAree + " " + aree.get(i));
+
+                    personePerArea.set(i, contaAree);
+                    contaAree = 0;
+
 
                 }
+
 
               /*  Log.d("db", String.valueOf(numPerson));
                 Toast.makeText(context, "ci sono" + numPerson + " persone all'unical!", Toast.LENGTH_SHORT).show();
 
 */
+                //  Log.d("ISIN","ma");
+
+               for(int k=0; k<aree.size();k++) {
+                    markerOp.add(new MarkerOptions()
+                            .position(new LatLng(coordinateAreea.get(k).latitude, coordinateAreea.get(k).longitude))
+                            .draggable(true));
+
+                    GPS.gmap.addMarker(markerOp.get(k));
+
+                    markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
+
+                }
             }
 
             @Override
@@ -65,7 +118,49 @@ public class DataBase {
         });
 
 
-        dbRef.child("user").addValueEventListener(new ValueEventListener() {
+    }
+
+      /*  Query prova = FirebaseDatabase.getInstance().getReference().child("user");
+        prova.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (int i = 0; i < aree.size(); i++) {
+                    int contaAree = 0;
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                        if (postSnapshot.child("area").getValue().equals(aree.get(i))) {
+                            contaAree++;
+                        }
+
+                    }
+
+                    Log.d("ISIN", contaAree + " " + aree.get(i));
+
+                    personePerArea.set(i, contaAree);
+                    contaAree = 0;
+
+
+                }
+
+
+
+                // marker.get(j).setTitle(personePerArea.get(j) + "persone nell'aerea"+aree.get(j));
+
+                // marker.get(j).showInfoWindow();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        });
+*/
+
+
+        /*dbRef.child("user").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,9 +174,11 @@ public class DataBase {
 
                     }
                 }
+
                // Log.d("ISIN", String.valueOf(c));
 
-                Toast.makeText(context, "ci sono" + c + "persone/a nella tua zona", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "ci sono" + c + "persone/a nella tua zona", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -89,8 +186,9 @@ public class DataBase {
 
             }
         });
+*/
 
-    }
+
 
 /*
     public void  headMap(Context context ){

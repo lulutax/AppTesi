@@ -47,4 +47,11 @@ public class AreaDemacs extends AreeUnical {
     public ArrayList<LatLng> getCoordinate() {
         return coordinate;
     }
+
+
+    public LatLng getCoordinateMarker(){
+
+        return new LatLng(39.362948, 16.226032);
+    }
+
 }

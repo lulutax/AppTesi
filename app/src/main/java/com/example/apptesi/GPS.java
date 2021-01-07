@@ -269,7 +269,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         gmap.clear();
         unical.drawAreaUnical();
         //unical.drawDemacs();
-        gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
+       // gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
        // db.headMap(this);
 
