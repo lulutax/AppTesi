@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -55,16 +57,16 @@ public class DataBase {
         userRef = FirebaseDatabase.getInstance().getReference().child("user");
 
 
-        /*for (int i = 0; i < aree.size(); i++) {
+        for (int i = 0; i < aree.size(); i++) {
             markerOp.add(new MarkerOptions()
                     .position(new LatLng(coordinateAreea.get(i).latitude, coordinateAreea.get(i).longitude))
-                    .draggable(true));
+                    .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.demacs)));
 
             GPS.gmap.addMarker(markerOp.get(i));
 
-            markerOp.get(i).title(aree.get(i) + " ci sono " + personePerArea.get(i) + "persone");
+            //markerOp.get(i).title(aree.get(i) + " ci sono " + personePerArea.get(i) + "persone");
 
-        }*/
+        }
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,13 +102,13 @@ public class DataBase {
                 //  Log.d("ISIN","ma");
 
                for(int k=0; k<aree.size();k++) {
-                    markerOp.add(new MarkerOptions()
+                   /* markerOp.add(new MarkerOptions()
                             .position(new LatLng(coordinateAreea.get(k).latitude, coordinateAreea.get(k).longitude))
-                            .draggable(true));
+                            .draggable(true).title("io sono qui"+String.valueOf(k)));
+*/                    markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
 
-                    GPS.gmap.addMarker(markerOp.get(k));
+                   GPS.gmap.addMarker(markerOp.get(k));
 
-                    markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
 
                 }
             }

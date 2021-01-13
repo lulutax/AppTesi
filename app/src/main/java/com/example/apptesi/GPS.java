@@ -97,10 +97,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
 
-        myToolbar  = findViewById(R.id.toolbar);
+        myToolbar  = findViewById(R.id.toolbarApp);
         user = new UserLocation();
         idPhone();
-        db = new DataBase(this);
 
 
     }
@@ -224,7 +223,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         unical = new Unical();
         unical.drawAreaUnical();
-       // unical.drawDemacs();
+        db = new DataBase(this);
+
+        // unical.drawDemacs();
        // startLocationBackground();
 
     }
