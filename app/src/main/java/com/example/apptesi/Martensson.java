@@ -1,7 +1,6 @@
 package com.example.apptesi;
 
 import android.graphics.Color;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -11,27 +10,29 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
 
-public class AreaDemacs extends AreeUnical {
+public class Martensson extends AreeUnical {
     ArrayList<LatLng> coordinate;
     PolygonOptions polygonOptions;
     GoogleMap gmap;
     MarkerOptions markerOptions;
     LatLng coordinateMarker;
 
-    AreaDemacs(){
+    Martensson(){
         coordinate= new ArrayList<>();
-        coordinateMarker = new LatLng(39.362948, 16.226032);
+        coordinateMarker = new LatLng(39.362008, 16.223631);
+
+
         gmap=GPS.gmap;
         markerOptions= new MarkerOptions()
                 .position(coordinateMarker)
                 .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.demacs));
-        //Areea Demacs-->inserisco le coordinate
+        //Martensson-->inserisco le coordinate
         polygonOptions = new PolygonOptions()
-                .add(new LatLng(39.362948, 16.226032),
-                        new LatLng(39.363018, 16.226657),
-                        new LatLng(39.363539, 16.226593),
-                        new LatLng(39.363547, 16.225923),
-                        new LatLng(39.362948, 16.226032));
+                .add(new LatLng(39.362937, 16.224484),
+                        new LatLng(39.362796, 16.223189),
+                        new LatLng(39.361519, 16.223382),
+                        new LatLng(39.361846, 16.224675),
+                        new LatLng(39.362937, 16.224484));
         Polygon polygon = gmap.addPolygon(polygonOptions);
         polygon.setStrokeColor(Color.RED);
         coordinate= (ArrayList<LatLng>) polygon.getPoints();
@@ -46,12 +47,18 @@ public class AreaDemacs extends AreeUnical {
 
     @Override
     public String getName() {
-        return "demacs";
+        return "martensson";
     }
 
     @Override
     public ArrayList<LatLng> getCoordinate() {
         return coordinate;
+    }
+
+
+    public LatLng getCoordinateMarker(){
+
+        return coordinateMarker;
     }
 
 
@@ -63,11 +70,6 @@ public class AreaDemacs extends AreeUnical {
 
 
 
- }
-
-    public LatLng getCoordinateMarker(){
-
-        return new LatLng(39.362948, 16.226032);
     }
 
 }

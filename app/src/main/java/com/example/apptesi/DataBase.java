@@ -44,19 +44,23 @@ public class DataBase {
 
     DatabaseReference dbRef;
     DatabaseReference userRef;
-    ArrayList<String> aree= new ArrayList<String>(Arrays.asList("dadefinire","demacs"));
-    ArrayList<Integer> personePerArea = new ArrayList<>(Arrays.asList(0,0));
-    ArrayList<LatLng> coordinateAreea = new ArrayList<>(Arrays.asList(new LatLng(39.358112, 16.229463),new LatLng(39.362948, 16.226032)));
+    //ArrayList<String> aree= new ArrayList<String>(Arrays.asList("dadefinire","demacs"));
+    ArrayList<Integer> personePerArea = new ArrayList<Integer>();
+  //  ArrayList<LatLng> coordinateAreea = new ArrayList<>(Arrays.asList(new LatLng(39.358112, 16.229463),new LatLng(39.362948, 16.226032)));
     private ArrayList<MarkerOptions> markerOp = new ArrayList<>() ;
     String areaUtente;
+    int contaAree=0;
 
     Context context;
     DataBase(final Context context) {
+
+
         this.context = context;
         dbRef = FirebaseDatabase.getInstance().getReference();
         userRef = FirebaseDatabase.getInstance().getReference().child("user");
 
 
+/*
         for (int i = 0; i < aree.size(); i++) {
             markerOp.add(new MarkerOptions()
                     .position(new LatLng(coordinateAreea.get(i).latitude, coordinateAreea.get(i).longitude))
@@ -66,7 +70,7 @@ public class DataBase {
 
             //markerOp.get(i).title(aree.get(i) + " ci sono " + personePerArea.get(i) + "persone");
 
-        }
+        }*/
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -76,20 +80,19 @@ public class DataBase {
 
 
                 }
-                for (int i = 0; i < aree.size(); i++) {
-                    int contaAree = 0;
+                for (int i = 0; i < GPS.unical.getListAree().size(); i++) {
+                    contaAree = 0;
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                        if (postSnapshot.child("area").getValue().equals(aree.get(i))) {
+                        if (postSnapshot.child("area").getValue().equals(GPS.unical.listAree.get(i).getName())) {
                             contaAree++;
                         }
 
                     }
 
-                    Log.d("ISIN", contaAree + " " + aree.get(i));
+                    Log.d("ISIN", contaAree + " " + GPS.unical.listAree.get(i).getName());
 
-                    personePerArea.set(i, contaAree);
-                    contaAree = 0;
+                    personePerArea.add(i, contaAree);
 
 
                 }
@@ -101,13 +104,16 @@ public class DataBase {
 */
                 //  Log.d("ISIN","ma");
 
-               for(int k=0; k<aree.size();k++) {
+               for(int k=0; k<GPS.unical.getListAree().size();k++) {
                    /* markerOp.add(new MarkerOptions()
                             .position(new LatLng(coordinateAreea.get(k).latitude, coordinateAreea.get(k).longitude))
                             .draggable(true).title("io sono qui"+String.valueOf(k)));
-*/                    markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
 
-                   GPS.gmap.addMarker(markerOp.get(k));
+*/
+                   GPS.unical.getListAree().get(k).setMarker(personePerArea.get(k));
+                  // markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
+
+                  // GPS.gmap.addMarker(markerOp.get(k));
 
 
                 }

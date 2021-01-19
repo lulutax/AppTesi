@@ -13,11 +13,12 @@ import java.util.ArrayList;
 
 public class Unical {
      PolygonOptions polygonOptions;
-    boolean result;
+     boolean result;
      ArrayList<LatLng> coordinateAreaUnical;
-    public GoogleMap gmap;
+     public GoogleMap gmap;
 
     AreaDemacs areaDemacs;
+    Martensson martensson;
 
     ArrayList<AreeUnical> listAree;
 
@@ -28,6 +29,7 @@ public class Unical {
         listAree = new ArrayList<>();
         gmap = GPS.gmap;
         areaDemacs = new AreaDemacs();
+        martensson = new Martensson();
 
         //Areea unical-->inserisco le coordinate
         polygonOptions = new PolygonOptions()
@@ -62,6 +64,7 @@ public class Unical {
 
         //aggiungo gli array nel listArray che mi servirà per la ricerca dell'area in cui si trova l'utente.
         listAree.add(areaDemacs);
+        listAree.add(martensson);
 
     }
 
@@ -71,6 +74,7 @@ public class Unical {
         polygon.setStrokeColor(Color.RED);
 
         areaDemacs.drawArea();
+        martensson.drawArea();
     }
 
 
@@ -99,4 +103,7 @@ public class Unical {
         return "dadefinire";
     }
 
+    public ArrayList<AreeUnical> getListAree() {
+        return listAree;
+    }
 }

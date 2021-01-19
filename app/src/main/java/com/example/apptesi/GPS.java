@@ -98,6 +98,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         }
 
         myToolbar  = findViewById(R.id.toolbarApp);
+        setSupportActionBar(myToolbar);
+
         user = new UserLocation();
         idPhone();
 
