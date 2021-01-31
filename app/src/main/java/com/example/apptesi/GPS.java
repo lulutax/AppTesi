@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +46,6 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID = 3;
     static UserLocation user;
-   // boolean isInTheUnical;
     private Intent intentLocationService ;
     static DataBase db;
     static Unical unical;
@@ -102,7 +102,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         user = new UserLocation();
         idPhone();
-
+        Log.d("prima","onCreate");
 
     }
 
@@ -229,6 +229,10 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         // unical.drawDemacs();
        // startLocationBackground();
+        UiSettings settings = googleMap.getUiSettings();
+        settings.setZoomControlsEnabled(true);
+        //settings.setMyLocationButtonEnabled(false);
+        Log.d("prima","onMapReady");
 
     }
 
@@ -249,7 +253,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
 
     public void reset(){
-
+        Log.d("position",myCoordinate.latitude +" "+ myCoordinate.longitude);
         user.setLatitude(myCoordinate.latitude);
         user.setLongitude(myCoordinate.longitude);
         user.setArea(unical.findMyArea(myCoordinate));
@@ -269,8 +273,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
 
 
-        gmap.clear();
-        unical.drawAreaUnical();
+       // gmap.clear();
+       // unical.drawAreaUnical();
         //unical.drawDemacs();
        // gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));

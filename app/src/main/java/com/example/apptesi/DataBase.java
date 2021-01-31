@@ -53,31 +53,21 @@ public class DataBase {
 
     Context context;
     DataBase(final Context context) {
-
+        for(int i =0;i<10;i++){
+            personePerArea.add(0);
+        }
 
         this.context = context;
         dbRef = FirebaseDatabase.getInstance().getReference();
         userRef = FirebaseDatabase.getInstance().getReference().child("user");
 
 
-/*
-        for (int i = 0; i < aree.size(); i++) {
-            markerOp.add(new MarkerOptions()
-                    .position(new LatLng(coordinateAreea.get(i).latitude, coordinateAreea.get(i).longitude))
-                    .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.demacs)));
-
-            GPS.gmap.addMarker(markerOp.get(i));
-
-            //markerOp.get(i).title(aree.get(i) + " ci sono " + personePerArea.get(i) + "persone");
-
-        }*/
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(GPS.android_id)) {
 
                     areaUtente = dataSnapshot.child(GPS.android_id).child("area").getValue().toString();
-
 
                 }
                 for (int i = 0; i < GPS.unical.getListAree().size(); i++) {
@@ -98,23 +88,9 @@ public class DataBase {
                 }
 
 
-              /*  Log.d("db", String.valueOf(numPerson));
-                Toast.makeText(context, "ci sono" + numPerson + " persone all'unical!", Toast.LENGTH_SHORT).show();
-
-*/
-                //  Log.d("ISIN","ma");
-
                for(int k=0; k<GPS.unical.getListAree().size();k++) {
-                   /* markerOp.add(new MarkerOptions()
-                            .position(new LatLng(coordinateAreea.get(k).latitude, coordinateAreea.get(k).longitude))
-                            .draggable(true).title("io sono qui"+String.valueOf(k)));
 
-*/
                    GPS.unical.getListAree().get(k).setMarker(personePerArea.get(k));
-                  // markerOp.get(k).title(aree.get(k)+" ci sono "+personePerArea.get(k)+"persone");
-
-                  // GPS.gmap.addMarker(markerOp.get(k));
-
 
                 }
             }

@@ -1,7 +1,6 @@
 package com.example.apptesi;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,20 +15,14 @@ public class Unical {
      boolean result;
      ArrayList<LatLng> coordinateAreaUnical;
      public GoogleMap gmap;
+     ArrayList<AreeUnical> listAree;
 
-    AreaDemacs areaDemacs;
-    Martensson martensson;
-
-    ArrayList<AreeUnical> listAree;
-
-   public Unical() {
+     public Unical() {
 
 
         coordinateAreaUnical = new ArrayList<>();
         listAree = new ArrayList<>();
         gmap = GPS.gmap;
-        areaDemacs = new AreaDemacs();
-        martensson = new Martensson();
 
         //Areea unical-->inserisco le coordinate
         polygonOptions = new PolygonOptions()
@@ -59,26 +52,27 @@ public class Unical {
         polygon.setStrokeColor(Color.RED);
         coordinateAreaUnical= (ArrayList<LatLng>) polygon.getPoints();
 
-         areaDemacs.drawArea();
 
-
-        //aggiungo gli array nel listArray che mi servirà per la ricerca dell'area in cui si trova l'utente.
-        listAree.add(areaDemacs);
-        listAree.add(martensson);
+        //aggiungo gli array nel listArray che mi servirà per la sapere quanti utenti sono nelle diverse aree.
+        listAree.add(new AreaDemacs());
+        listAree.add(new Martensson());
+        listAree.add(new Cafe());
 
     }
-
 
     public void drawAreaUnical() {
         Polygon polygon = gmap.addPolygon(polygonOptions);
         polygon.setStrokeColor(Color.RED);
 
-        areaDemacs.drawArea();
-        martensson.drawArea();
+
+        for(int i=0;i<listAree.size();i++){
+            listAree.get(i).drawArea();
+        }
+
     }
 
 
-    public boolean isInTheArea(LatLng pos){
+     public boolean isInTheArea(LatLng pos){
 
 
         if (pos == null){
@@ -88,7 +82,7 @@ public class Unical {
     }
 
 
-    public String findMyArea(LatLng pos){
+     public String findMyArea(LatLng pos){
        result = false;
         if (pos == null){
             return null;
@@ -103,7 +97,7 @@ public class Unical {
         return "dadefinire";
     }
 
-    public ArrayList<AreeUnical> getListAree() {
+        public ArrayList<AreeUnical> getListAree() {
         return listAree;
     }
 }
