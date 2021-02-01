@@ -2,6 +2,7 @@ package com.example.apptesi;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.CheckBoxPreference;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,19 +42,19 @@ import java.util.ArrayList;
 
 public class GPS extends AppCompatActivity implements LocationListener, OnMapReadyCallback  {
     protected LocationManager locationManager;
-    double lat, lon;
     LatLng myCoordinate = null;
     static  GoogleMap gmap;
     static String android_id;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID = 3;
     static UserLocation user;
-    private Intent intentLocationService ;
     static DataBase db;
     static Unical unical;
     private Toolbar myToolbar;
     String area;
    static Context context;
+    static Intent intentLocationService;
+   public static LocationService locationService;
 
 
     //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) da aggiungere decidere ogni quanto aggiornare la posizione )
@@ -67,19 +70,23 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
             serv.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    //stopService(intentLocationService);
-                  //  Intent settingsIntent = new Intent(GPS.this,SettingsActivity.class);
                     startActivity(new Intent(GPS.this,SettingsActivity.class));
                     return true;
                     }
             });
 
+            MenuItem privacy = menu.findItem(R.id.privacy);
+            privacy.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    startActivity( new Intent( GPS.this, PrivacyActivity.class));
+                    return false;
+                }
+            });
+
         }
         return true;
     }
-
-
-
 
 
     @Override
@@ -105,11 +112,12 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         user = new UserLocation();
         idPhone();
-        Log.d("prima","onCreate");
+
+
 
     }
 
-
+/*
     public void startLocationBackground(){
 
         //-----------------------PROBLEMA-------------non mi appare il check del permesso della location in background? --------------------
@@ -122,7 +130,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         startService(intentLocationService);
 
 
-    }
+    }*/
 
 
 
@@ -222,8 +230,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
-        LatLng coordinates = new LatLng(lat, lon);
-        googleMap.addMarker(new MarkerOptions().position(coordinates).title("io sono qui"));
+        LatLng coordinates = new LatLng(39.362385, 16.226529);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
 
         unical = new Unical();
@@ -235,7 +242,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         settings.setZoomControlsEnabled(true);
         //settings.setMyLocationButtonEnabled(false);
         Log.d("prima","onMapReady");
-
+        locationService= new LocationService();
+        intentLocationService= new Intent(getApplicationContext(),LocationService.class);
+        //startService(intentLocationService);
     }
 
 
@@ -283,6 +292,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
        // db.headMap(this);
 
     }
+public void stopLocation(){
+        //stopService(intentLocationService);
+}
 
 
 

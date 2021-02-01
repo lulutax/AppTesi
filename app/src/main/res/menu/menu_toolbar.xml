@@ -5,6 +5,11 @@
         android:actionLayout="@layout/activity_main"
         android:orderInCategory="100"
         android:title="settings" />
+    <item
+        android:id="@+id/privacy"
+        android:actionLayout="@layout/activity_main"
+        android:orderInCategory="100"
+        android:title="Privacy" />
 
 
 </menu>

@@ -1,6 +1,7 @@
 package com.example.apptesi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
 
 import android.os.Bundle;
 import android.widget.Toolbar;
@@ -16,6 +17,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             getFragmentManager().beginTransaction().add(R.id.fragment_container,new SettingsFragment()).commit();
+
 
         }
     }

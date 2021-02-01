@@ -9,9 +9,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-
 public class SettingsFragment extends PreferenceFragment {
-
 
 
 
@@ -25,11 +23,10 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 Log.d("preference", newValue.toString());
+                GPS.locationService.setInterval(Integer.parseInt(newValue.toString()));
                 return false;
             }
         });
-
-       // final CheckBoxPreference checkbox2 = (CheckBoxPreference) findPreference("background");
 
         final CheckBoxPreference ch = (CheckBoxPreference) findPreference("background");
         ch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -37,11 +34,15 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 if (ch.isChecked()) {
                     ch.setChecked(true);
-                    startLocationBackground();
+                    if(GPS.locationService.active== false) {
+                        startLocationBackground();
+                    }
                 } else {
-                    //ch.setEnabled(false);
-
                     ch.setChecked(false);
+                    if(GPS.locationService.active== true){
+                        Log.d("LOCATION_UPDATE","entro nel if");
+                        GPS.locationService.stopService(GPS.intentLocationService);
+                    }
 
                 }
                 return true;
@@ -49,12 +50,10 @@ public class SettingsFragment extends PreferenceFragment {
     });
     }
 
-
-
     public void startLocationBackground(){
-        getActivity().startService(new Intent(getActivity(), LocationService.class));
-
+        getActivity().startService(GPS.intentLocationService);
 
     }
+
 
 }

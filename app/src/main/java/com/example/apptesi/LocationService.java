@@ -23,17 +23,21 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static android.app.NotificationManager.*;
 
 public class LocationService extends Service {
-
     private static final String CHANNEL_ID = "Location_notification_chanel";
     private double latitude, longitude;
-    LatLng myCoordinate;
-    boolean isIn;
+    static LatLng myCoordinate;
     int importance=0;
+    long interval=300000;
+    DatabaseReference userRef;
+    static boolean active= false;
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -42,7 +46,7 @@ public class LocationService extends Service {
                 latitude = locationResult.getLastLocation().getLatitude();
                 longitude = locationResult.getLastLocation().getLongitude();
                 myCoordinate = new LatLng(latitude, longitude);
-                //reset();
+                reset();
                 Log.d("LOCATION_UPDATE", myCoordinate.latitude + " " + myCoordinate.longitude);
 
 
@@ -50,6 +54,11 @@ public class LocationService extends Service {
         }
     };
 
+
+    public LocationService(){
+        userRef = FirebaseDatabase.getInstance().getReference().child("user");
+
+    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -100,8 +109,8 @@ public class LocationService extends Service {
 
 
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(60000);
-        locationRequest.setFastestInterval(60000); // update location every minute
+        locationRequest.setInterval(interval);
+        locationRequest.setFastestInterval(interval); // update location every minute
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 
@@ -111,12 +120,25 @@ public class LocationService extends Service {
 
     }
 
+    public void setInterval(int value) {
+        if(value == 5){
+            interval = 300000;
+
+        }else if(value==10)
+       {
+           interval = 600000;
+
+       }
+        else if(value== 15){
+            interval = 900000;
+
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-Log.d("prova","onStartCOmmand");
-        isIn= false;
+        active= true;
         startLocationService();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -124,6 +146,9 @@ Log.d("prova","onStartCOmmand");
 
     @Override
     public boolean stopService(Intent name) {
+        Log.d("LOCATION_UPDATE","stopService");
+        active= false;
+
         return super.stopService(name);
     }
 
@@ -131,12 +156,26 @@ Log.d("prova","onStartCOmmand");
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("prova","stop");
         LocationServices.getFusedLocationProviderClient(getApplicationContext()).removeLocationUpdates(locationCallback);
         stopForeground(true);
 
         stopSelf();
     }
+    public void reset(){
+        GPS.user.setLatitude(myCoordinate.latitude);
+        GPS.user.setLongitude(myCoordinate.longitude);
+        GPS.user.setArea(GPS.unical.findMyArea(myCoordinate));
+
+        if(GPS.unical.isInTheArea(myCoordinate)) {
+            userRef.child(GPS.android_id).setValue( GPS.user);
+        }else{
+            userRef.child(GPS.android_id).removeValue();
+            Log.d("ISIN","non è all'interno dell unical");
+        }
+
+    }
+
+
 
 
 }
