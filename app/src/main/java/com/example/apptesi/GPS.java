@@ -51,6 +51,7 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     static Unical unical;
     private Toolbar myToolbar;
     String area;
+   static Context context;
 
 
     //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) da aggiungere decidere ogni quanto aggiornare la posizione )
@@ -62,11 +63,13 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         inflater.inflate(R.menu.menu_toolbar, menu); // inflate your menu resource
 
         if (menu != null) {
-            MenuItem serv = menu.findItem(R.id.closeLocationService);
+            MenuItem serv = menu.findItem(R.id.settings);
             serv.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    stopService(intentLocationService);
+                    //stopService(intentLocationService);
+                  //  Intent settingsIntent = new Intent(GPS.this,SettingsActivity.class);
+                    startActivity(new Intent(GPS.this,SettingsActivity.class));
                     return true;
                     }
             });
@@ -89,9 +92,9 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ){
 
-            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.FOREGROUND_SERVICE}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
         else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
@@ -226,7 +229,6 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         unical = new Unical();
         unical.drawAreaUnical();
         db = new DataBase(this);
-
         // unical.drawDemacs();
        // startLocationBackground();
         UiSettings settings = googleMap.getUiSettings();

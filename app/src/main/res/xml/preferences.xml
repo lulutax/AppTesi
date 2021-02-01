@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <CheckBoxPreference
+            android:key="background"
+            android:title="@string/background"
+            android:summary="@string/background_summary"
+            android:defaultValue="false"/>
+        <ListPreference
+            android:dependency="background"
+            android:key="background_sync"
+            android:title="@string/sync_title"
+            android:entries="@array/sync_background"
+            android:entryValues="@array/sync_background_value"
+            android:defaultValue="@string/sync_background_defaut_value"
+            android:summary="@string/sync_background_summary"/>
+
+</PreferenceScreen>

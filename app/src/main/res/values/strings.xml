@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">appTesi</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Backgr Titles -->
+    <string name="background">Background</string>
+    <string name="background_summary">Consenti al servizio di accedere alla tua posizione in background </string>
+
+    <string name="channel_name">canale</string>
+    <string name="channel_description">canale</string>
+
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync position </string>
+    <string name="sync_background_defaut_value">10</string>
+    <string name="sync_background_summary">Intervallo di sincronizzazione della tua posizione</string>
+
 </resources>

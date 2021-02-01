@@ -25,7 +25,7 @@ public class Martensson extends AreeUnical {
         gmap=GPS.gmap;
         markerOptions= new MarkerOptions()
                 .position(coordinateMarker)
-                .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.demacs));
+                .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.mensacentrale));
         //Martensson-->inserisco le coordinate
         polygonOptions = new PolygonOptions()
                 .add(new LatLng(39.362937, 16.224484),
