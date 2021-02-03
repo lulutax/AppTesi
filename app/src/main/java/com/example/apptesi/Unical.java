@@ -65,9 +65,9 @@ public class Unical {
         polygon.setStrokeColor(Color.RED);
 
 
-        for(int i=0;i<listAree.size();i++){
+    /*   for(int i=0;i<listAree.size();i++){
             listAree.get(i).drawArea();
-        }
+        }*/
 
     }
 

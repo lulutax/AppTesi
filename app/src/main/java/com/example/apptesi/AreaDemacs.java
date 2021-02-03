@@ -33,14 +33,15 @@ public class AreaDemacs extends AreeUnical {
                         new LatLng(39.363547, 16.225923),
                         new LatLng(39.362948, 16.226032));
         Polygon polygon = gmap.addPolygon(polygonOptions);
-        polygon.setStrokeColor(Color.RED);
+        polygon.setVisible(false);
+       //  polygon.setStrokeColor(Color.RED);
         coordinate= (ArrayList<LatLng>) polygon.getPoints();
     }
 
 
     @Override
     public void drawArea() {
-        Polygon polygon = gmap.addPolygon(polygonOptions); //cancellare poi e inserire un oggetto singolo
+       Polygon polygon = gmap.addPolygon(polygonOptions); //cancellare poi e inserire un oggetto singolo
         polygon.setStrokeColor(Color.RED);
     }
 

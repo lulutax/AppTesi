@@ -1,6 +1,8 @@
 package com.example.apptesi;
 
 import android.graphics.Color;
+import android.util.Log;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,7 +36,8 @@ public class Martensson extends AreeUnical {
                         new LatLng(39.361846, 16.224675),
                         new LatLng(39.362937, 16.224484));
         Polygon polygon = gmap.addPolygon(polygonOptions);
-        polygon.setStrokeColor(Color.RED);
+       // polygon.setStrokeColor(Color.RED);
+        polygon.setVisible(false);
         coordinate= (ArrayList<LatLng>) polygon.getPoints();
     }
 
@@ -42,7 +45,7 @@ public class Martensson extends AreeUnical {
     @Override
     public void drawArea() {
         Polygon polygon = gmap.addPolygon(polygonOptions); //cancellare poi e inserire un oggetto singolo
-        polygon.setStrokeColor(Color.RED);
+       // polygon.setStrokeColor(Color.RED);
     }
 
     @Override

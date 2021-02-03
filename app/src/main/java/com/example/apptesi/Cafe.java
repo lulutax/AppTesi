@@ -28,7 +28,7 @@ public class Cafe extends AreeUnical {
         gmap=GPS.gmap;
         markerOptions= new MarkerOptions()
                 .position(coordinateMarker)
-                .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.demacs));
+                .draggable(true).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.bar));
         polygonOptions = new PolygonOptions()
                 .add(new LatLng(39.3618, 16.2263),
                         new LatLng(39.3618, 16.2264),
@@ -36,14 +36,16 @@ public class Cafe extends AreeUnical {
                         new LatLng(39.3617, 16.2263),
                         new LatLng(39.3618, 16.2263));
         Polygon polygon = gmap.addPolygon(polygonOptions);
-        polygon.setStrokeColor(Color.RED);
+        polygon.setVisible(false);
+
+        //  polygon.setStrokeColor(Color.RED);
         coordinate= (ArrayList<LatLng>) polygon.getPoints();
     }
 
     @Override
     public void drawArea() {
         Polygon polygon = gmap.addPolygon(polygonOptions); //cancellare poi e inserire un oggetto singolo
-        polygon.setStrokeColor(Color.RED);
+       // polygon.setStrokeColor(Color.RED);
     }
 
     @Override

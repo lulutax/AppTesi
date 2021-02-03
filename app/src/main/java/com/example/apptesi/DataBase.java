@@ -47,7 +47,6 @@ public class DataBase {
     //ArrayList<String> aree= new ArrayList<String>(Arrays.asList("dadefinire","demacs"));
     ArrayList<Integer> personePerArea = new ArrayList<Integer>();
   //  ArrayList<LatLng> coordinateAreea = new ArrayList<>(Arrays.asList(new LatLng(39.358112, 16.229463),new LatLng(39.362948, 16.226032)));
-    private ArrayList<MarkerOptions> markerOp = new ArrayList<>() ;
     String areaUtente;
     int contaAree=0;
 
@@ -81,18 +80,20 @@ public class DataBase {
                     }
 
                     Log.d("ISIN", contaAree + " " + GPS.unical.listAree.get(i).getName());
-
                     personePerArea.add(i, contaAree);
-
+                    Log.d("prova","fine incremento");
 
                 }
 
-
-               for(int k=0; k<GPS.unical.getListAree().size();k++) {
+                Log.d("prova","sono nel db");
+                GPS.gmap.clear();
+                GPS.unical.drawAreaUnical();
+                for(int k=0; k<GPS.unical.getListAree().size();k++) {
 
                    GPS.unical.getListAree().get(k).setMarker(personePerArea.get(k));
+                   Log.d("prova",personePerArea.get(k).toString());
 
-                }
+               }
             }
 
             @Override
