@@ -20,14 +20,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarApp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#F44336"
+        android:layout_width="417dp"
+        android:layout_height="53dp"
+        android:background="@android:color/holo_red_dark"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintBottom_toTopOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"

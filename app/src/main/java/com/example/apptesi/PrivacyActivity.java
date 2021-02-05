@@ -13,7 +13,9 @@ public class PrivacyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_privacy);
         TextView message = findViewById(R.id.textView2);
         StringBuilder stringBuilder = new StringBuilder();
-        String text= "Questa applicazione non usa alcuna informazione dell'utente che la usa, vengono salvati i dati riguardo la posizione attraverso l'imei del telefono.";
+        String text= "L'app Crowd Campus per tracciare il numero degli utenti all'interno del campus utilizza il codice IMEI, International Mobile Equipe Identity, " +
+                "così da identificare il dispositivo che si trova in un dato momento e in un determinato luogo. Questo codice verrà rimosso dal nostro Database nel momento " +
+                "in cui l'utente esce dal campus. ";
 
         message.append(text);
     }

@@ -57,6 +57,7 @@ public class Unical {
         listAree.add(new AreaDemacs());
         listAree.add(new Martensson());
         listAree.add(new Cafe());
+        listAree.add(new Biblioteca());
 
     }
 

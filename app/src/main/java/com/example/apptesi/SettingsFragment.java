@@ -41,7 +41,7 @@ public class SettingsFragment extends PreferenceFragment {
                     ch.setChecked(false);
                     if(GPS.locationService.active== true){
                         Log.d("LOCATION_UPDATE","entro nel if");
-                        GPS.locationService.stopService(GPS.intentLocationService);
+                        getActivity().stopService(GPS.intentLocationService);
                     }
 
                 }
