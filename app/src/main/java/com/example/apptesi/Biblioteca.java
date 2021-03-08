@@ -22,7 +22,7 @@ public class Biblioteca extends AreeUnical{
 
     Biblioteca(){
         coordinate= new ArrayList<>();
-        coordinateMarker = new LatLng(39.3617, 16.2249);
+        coordinateMarker = new LatLng(39.3616807212, 16.2249290943);
         gmap=GPS.gmap;
         markerOptions= new MarkerOptions()
                 .position(coordinateMarker)
@@ -43,7 +43,7 @@ public class Biblioteca extends AreeUnical{
 
     @Override
     public void drawArea() {
-        Polygon polygon = gmap.addPolygon(polygonOptions); //cancellare poi e inserire un oggetto singolo
+        Polygon polygon = gmap.addPolygon(polygonOptions);
         polygon.setStrokeColor(Color.RED);
     }
 
@@ -61,7 +61,7 @@ public class Biblioteca extends AreeUnical{
 
     @Override
     public void setMarker(int p) {
-        markerOptions.title(getName()+" ci sono "+ p +"persone");
+        markerOptions.title(getName()+": ci sono "+ p +" persone");
         gmap.addMarker(markerOptions);
 
 

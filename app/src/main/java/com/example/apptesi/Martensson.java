@@ -21,7 +21,7 @@ public class Martensson extends AreeUnical {
 
     Martensson(){
         coordinate= new ArrayList<>();
-        coordinateMarker = new LatLng(39.362008, 16.223631);
+        coordinateMarker = new LatLng(39.3625615499, 16.2239567935);
 
 
         gmap=GPS.gmap;
@@ -50,7 +50,7 @@ public class Martensson extends AreeUnical {
 
     @Override
     public String getName() {
-        return "martensson";
+        return "Martensson";
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Martensson extends AreeUnical {
 
     @Override
     public void setMarker(int p) {
-        markerOptions.title(getName()+" ci sono "+ p +"persone");
+        markerOptions.title(getName()+": ci sono "+ p +" persone");
         gmap.addMarker(markerOptions);
 
 

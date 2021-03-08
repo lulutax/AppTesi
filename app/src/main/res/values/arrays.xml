@@ -1,9 +1,8 @@
 <resources>
-    <!-- Reply Preference -->
     <string-array name="sync_background">
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
     </string-array>
 
     <string-array name="sync_background_value">
@@ -12,3 +11,6 @@
         <item>15</item>
     </string-array>
 </resources>
+
+
+

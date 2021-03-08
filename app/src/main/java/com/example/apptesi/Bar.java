@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
 
-public class Cafe extends AreeUnical {
+public class Bar extends AreeUnical {
 
 
     ArrayList<LatLng> coordinate;
@@ -20,9 +20,9 @@ public class Cafe extends AreeUnical {
     MarkerOptions markerOptions;
     LatLng coordinateMarker;
 
-    Cafe(){
+    Bar(){
         coordinate= new ArrayList<>();
-        coordinateMarker = new LatLng(39.3617, 16.2264);
+        coordinateMarker = new LatLng(39.3617398237, 16.2263573706);
 
 
         gmap=GPS.gmap;
@@ -50,7 +50,7 @@ public class Cafe extends AreeUnical {
 
     @Override
     public String getName() {
-        return "cafe";
+        return "Bar";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Cafe extends AreeUnical {
 
     @Override
     public void setMarker(int p) {
-        markerOptions.title(getName()+" ci sono "+ p +"persone");
+        markerOptions.title(getName()+": ci sono "+ p +" persone");
         gmap.addMarker(markerOptions);
     }
 }

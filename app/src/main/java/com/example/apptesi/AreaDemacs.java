@@ -47,7 +47,7 @@ public class AreaDemacs extends AreeUnical {
 
     @Override
     public String getName() {
-        return "demacs";
+        return "Demacs";
     }
 
     @Override
@@ -59,12 +59,9 @@ public class AreaDemacs extends AreeUnical {
 
     @Override
     public void setMarker(int p) {
-        markerOptions.title(getName()+" ci sono "+ p +"persone");
+        markerOptions.title(getName()+": ci sono "+ p +" persone");
         gmap.addMarker(markerOptions);
-
-
-
- }
+    }
 
     public LatLng getCoordinateMarker(){
 

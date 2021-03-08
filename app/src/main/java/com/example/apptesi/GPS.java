@@ -10,18 +10,22 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.preference.CheckBoxPreference;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,12 +59,11 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
    static Context context;
     static Intent intentLocationService;
    public static LocationService locationService;
+    TelephonyManager telephonyManager;
 
 
-    //menuItem of toolbar (mi serve per inserire 1) apri/chiudi locationService 2) da aggiungere decidere ogni quanto aggiornare la posizione )
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_toolbar, menu); // inflate your menu resource
@@ -89,9 +92,11 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -99,9 +104,14 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE)
+                != PackageManager.PERMISSION_GRANTED ){
 
-            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.FOREGROUND_SERVICE}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.FOREGROUND_SERVICE},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
         else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
@@ -109,29 +119,14 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
 
         myToolbar  = findViewById(R.id.toolbarApp);
         setSupportActionBar(myToolbar);
-
         user = new UserLocation();
+         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
         idPhone();
 
 
 
     }
-
-/*
-    public void startLocationBackground(){
-
-        //-----------------------PROBLEMA-------------non mi appare il check del permesso della location in background? --------------------
-        if( ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.ACCESS_BACKGROUND_LOCATION},2);
-        }
-
-
-        intentLocationService = new Intent(getApplicationContext(), LocationService.class);
-        startService(intentLocationService);
-
-
-    }*/
-
 
 
     @Override
@@ -140,7 +135,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         if (myCoordinate == null) {
             myCoordinate = newCoordinate;
             reset();
-        } else if (myCoordinate != null && (myCoordinate.latitude != newCoordinate.latitude && myCoordinate.longitude != newCoordinate.longitude)) {
+        } else if (myCoordinate != null && (myCoordinate.latitude != newCoordinate.latitude &&
+                myCoordinate.longitude != newCoordinate.longitude)) {
 
             myCoordinate = newCoordinate;
             reset();
@@ -203,9 +199,8 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
             case MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    android_id= telephonyManager.getImei();
 
-                    android_id = Settings.Secure.getString(this.getContentResolver(),
-                            Settings.Secure.ANDROID_ID);
 
                 } else if (grantResults.length > 0
                         && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -236,35 +231,30 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
         unical = new Unical();
         unical.drawAreaUnical();
         db = new DataBase(this);
-        // unical.drawDemacs();
        // startLocationBackground();
         UiSettings settings = googleMap.getUiSettings();
         settings.setZoomControlsEnabled(true);
         //settings.setMyLocationButtonEnabled(false);
-        Log.d("prima","onMapReady");
         locationService= new LocationService();
         intentLocationService= new Intent(getApplicationContext(),LocationService.class);
         //startService(intentLocationService);
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void idPhone(){
         //permessi
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ) {
-
-            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID);
-
+            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_ACCESS_ANDROID_ID);
         }else {
-            android_id = Settings.Secure.getString(this.getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-
+            android_id= telephonyManager.getImei();
         }
-
     }
 
 
     public void reset(){
-        Log.d("position",myCoordinate.latitude +" "+ myCoordinate.longitude);
+
         user.setLatitude(myCoordinate.latitude);
         user.setLongitude(myCoordinate.longitude);
         user.setArea(unical.findMyArea(myCoordinate));
@@ -273,28 +263,17 @@ public class GPS extends AppCompatActivity implements LocationListener, OnMapRea
            db.userRef.child(android_id).setValue(user);
         }else{
             db.userRef.child(android_id).removeValue();
-            Log.d("ISIN","non è all'interno dell unical");
         }
 
-
-
-
-
-
-
-
-
-       // gmap.clear();
-       // unical.drawAreaUnical();
-        //unical.drawDemacs();
-       // gmap.addMarker(new MarkerOptions().position(myCoordinate).title("io sono qui"));
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCoordinate, 15));
-       // db.headMap(this);
 
     }
-public void stopLocation(){
+
+
+
+    public void stopLocation(){
         //stopService(intentLocationService);
-}
+    }
 
 
 

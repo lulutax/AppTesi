@@ -44,55 +44,44 @@ public class DataBase {
 
     DatabaseReference dbRef;
     DatabaseReference userRef;
-    //ArrayList<String> aree= new ArrayList<String>(Arrays.asList("dadefinire","demacs"));
-    ArrayList<Integer> personePerArea = new ArrayList<Integer>();
-  //  ArrayList<LatLng> coordinateAreea = new ArrayList<>(Arrays.asList(new LatLng(39.358112, 16.229463),new LatLng(39.362948, 16.226032)));
-    String areaUtente;
-    int contaAree=0;
+    ArrayList<Integer> personForArea = new ArrayList<Integer>();
+    String areaUser;
+    int contAree=0;
 
     Context context;
     DataBase(final Context context) {
         for(int i =0;i<10;i++){
-            personePerArea.add(0);
+            personForArea.add(0);
         }
 
         this.context = context;
         dbRef = FirebaseDatabase.getInstance().getReference();
         userRef = FirebaseDatabase.getInstance().getReference().child("user");
 
-
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(GPS.android_id)) {
-
-                    areaUtente = dataSnapshot.child(GPS.android_id).child("area").getValue().toString();
-
+                    areaUser= dataSnapshot.child(GPS.android_id).child("area").getValue().toString();
                 }
                 for (int i = 0; i < GPS.unical.getListAree().size(); i++) {
-                    contaAree = 0;
+                    contAree = 0;
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-
                         if (postSnapshot.child("area").getValue().equals(GPS.unical.listAree.get(i).getName())) {
-                            contaAree++;
+                            contAree++;
                         }
-
                     }
 
-                    Log.d("ISIN", contaAree + " " + GPS.unical.listAree.get(i).getName());
-                    personePerArea.add(i, contaAree);
-                    Log.d("prova","fine incremento");
+                    Log.d("Area", contAree + " " + GPS.unical.listAree.get(i).getName());
+                    personForArea.add(i, contAree);
 
                 }
 
-                Log.d("prova","sono nel db");
                 GPS.gmap.clear();
                 GPS.unical.drawAreaUnical();
+
                 for(int k=0; k<GPS.unical.getListAree().size();k++) {
-
-                   GPS.unical.getListAree().get(k).setMarker(personePerArea.get(k));
-                   Log.d("prova",personePerArea.get(k).toString());
-
+                   GPS.unical.getListAree().get(k).setMarker(personForArea.get(k));
                }
             }
 
